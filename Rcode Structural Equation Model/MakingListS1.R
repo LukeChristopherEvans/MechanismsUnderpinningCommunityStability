@@ -30,6 +30,8 @@ makelist <- function(dt){
     nData=nrow(dt),
     nCountry=length(unique(dt$CountryIndex)),
     
+    Intercept = rep(1,nrow(dt)),
+    
     # variables
     SppRich = scale(dt$spprich)[,1],
     SynIndex = scale(dt$synindex)[,1],
@@ -66,4 +68,4 @@ makelist <- function(dt){
 CommunityList=makelist(CommunityData)
 
 # save for quick access 
-saveRDS(CommunityList,paste0(folderpath,"/MechanismsUnderpinningCommunityStability/Data/CommunityList.rds"))
+#saveRDS(CommunityList,paste0(folderpath,"/MechanismsUnderpinningCommunityStability/Data/CommunityList.rds"))

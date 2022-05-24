@@ -21,8 +21,9 @@ bci1 = extract.samples(d6)
 #https://www.tandfonline.com/doi/full/10.1080/00031305.2020.1717621
 bp1 = 2*(1- max(c(sum(bci1$ADSEP[,1] >0) / 4000, sum(bci1$ADSEP[,1] <0) /4000)))
 
-dataoutpath = "MechanismsUnderpinningCommunityStability/Data"
-setres = readRDS(paste0(folderpath,dataoutpath, "setres.RData" ))
-nextindex = which.min(!sapply(setres,is.null))
-setres[[nextindex]] =c(bp1)
-saveRDS(setres,paste0(folderpath,dataoutpath, "setres.RData" ))
+#to save - commented out here
+#dataoutpath = "MechanismsUnderpinningCommunityStability/Data"
+#FischersC = readRDS(paste0(folderpath,dataoutpath, "FischersC.RData" ))
+#nextindex = which.min(!sapply(FischersC,is.null))
+#FischersC[[nextindex]] =c(bp1)
+#saveRDS(FischersC,paste0(folderpath,dataoutpath, "FischersC.RData" ))

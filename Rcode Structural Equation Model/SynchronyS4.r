@@ -3,11 +3,13 @@
 # load data
 folderpath = "" 
 functionpath = "MechanismsUnderpinningCommunityStability/Rcode Structural Equation Model/PlottingFunctions.R"
-datapath = "MechanismsUnderpinningCommunityStability/Data/CommunityList.rds"
+listpath = "MechanismsUnderpinningCommunityStability/Data/CommunityList.rds"
+datapath = "MechanismsUnderpinningCommunityStability/Data/CommunityButterflyData.csv"
 stanpath = "MechanismsUnderpinningCommunityStability/Stan code Structural Equation model/"
 
 source(paste0(folderpath,functionpath)) # will load required packages
-CommunityList = read_rds(paste0(folderpath,datapath))
+CommunityList = read_rds(paste0(folderpath,listpath))
+CommunityData = read.csv(paste0(folderpath,datapath))
 
 
 # model structure syn ~ int + jaccard + spprich + spatial intercept

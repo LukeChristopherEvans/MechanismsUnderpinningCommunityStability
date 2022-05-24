@@ -1,11 +1,10 @@
 #plotting functions 
 library(tidyverse)
-library(ggsci)
 library(cowplot)
 library(RColorBrewer)
 library(scales)
 library(rethinking)
-library(mgcv)
+
 
 # color scheme
 #cols<-pal_lancet("lanonc")(3)
@@ -36,7 +35,7 @@ distanceplot <-  function(posteriorsamp, PriToPost=F,VarName ="x") {
   axis(side = 2, lwd = 0, lwd.ticks = 2, las = 2,cex.axis=1.3)
   
   
-  for(i in 1:sitenichel$nCountry) {
+  for(i in 1:CommunityList$nCountry) {
     
     distrange <- seq(from=0,to=1,length.out=100)
     pmcov<- sapply(distrange, function(x) posteriorsamp$etasq[,i]*exp(-posteriorsamp$rhosq[,i]*x^2) )
@@ -67,7 +66,7 @@ distanceplot <-  function(posteriorsamp, PriToPost=F,VarName ="x") {
     }
     
     distrange <- seq(from=0,to=1,length.out=100)
-    for(i in 1:sitenichel$nCountry) {
+    for(i in 1:CommunityList$nCountry) {
       for (j in 1:50) {
         lines(tdistrange, posteriorsamp$etasq[j,i]*exp(-posteriorsamp$rhosq[j,i]*distrange^2),lwd=0.4,col=cols[i])
       }
@@ -91,15 +90,15 @@ spatialvarplot <-  function(posteriorsamp=posteriorsamp) {
   maplist<-list(Spm,Fm,Ukm)
   
   par(mfrow=c(1,3))
-  for(i in 1:sitenichel$nCountry) {
+  for(i in 1:CommunityList$nCountry) {
     #i <- 3
-    dimi<-ifelse(i==3,sitenichel$nUK,ifelse(i==2,sitenichel$nFin,sitenichel$nSpan))
+    dimi<-ifelse(i==3,CommunityList$nUK,ifelse(i==2,CommunityList$nFin,CommunityList$nSpan))
     mat<-if(i==3) {
-      sitenichel$UKMat
+      CommunityList$UKMat
     } else if(i==2) {
-      sitenichel$FinMat
+      CommunityList$FinMat
     } else {
-      sitenichel$SpainMat}
+      CommunityList$SpainMat}
     
     K <-matrix(0,nrow = dimi,ncol=dimi)
     
@@ -116,11 +115,11 @@ spatialvarplot <-  function(posteriorsamp=posteriorsamp) {
     
     # long lat
     lonlat<-if(i==3) {
-      dplyr::filter(siteniches2,site=="UK")[,c(4,5)]
+      dplyr::filter(CommunityData,site=="UK")[,c(3,4)]
     } else if(i==2) {
-      dplyr::filter(siteniches2,site=="FIN")[,c(4,5)]
+      dplyr::filter(CommunityData,site=="FIN")[,c(3,4)]
     } else {
-      dplyr::filter(siteniches2,site=="CAT")[,c(4,5)]}
+      dplyr::filter(CommunityData,site=="CAT")[,c(3,4)]}
     
     
     par(mar=rep(0,4))
@@ -141,16 +140,16 @@ spatialvarplot <-  function(posteriorsamp=posteriorsamp) {
 # posterior plot function
 plotter <- function(posteriorsamp,stanx,stany,dtx,dty,lineeq=T,margeq=F, drawcor=F ,xlab="x",ylab="y",m1=NA,m2=NA,m3=NA,m4=NA,roundtox=1,roundtoy=1,linetype=c("sss"),yl=0,yu=1) {
   
-  stanxvals<-sitenichel[[stanx]]
-  stanyvals<-sitenichel[[stany]]
-  dtxvals <- siteniches2[[dtx]]
-  dtyvals <- siteniches2[[dty]]
+  stanxvals<-CommunityList[[stanx]]
+  stanyvals<-CommunityList[[stany]]
+  dtxvals <- CommunityData[[dtx]]
+  dtyvals <- CommunityData[[dty]]
   
   #marginal values 
-  m1val<-sitenichel[[m1]]
-  m2val<-sitenichel[[m2]]
-  m3val<-sitenichel[[m3]]
-  m4val<-sitenichel[[m4]]
+  m1val<-CommunityList[[m1]]
+  m2val<-CommunityList[[m2]]
+  m3val<-CommunityList[[m3]]
+  m4val<-CommunityList[[m4]]
   
   # full x
   mxf<-max(stanxvals)
@@ -181,10 +180,10 @@ plotter <- function(posteriorsamp,stanx,stany,dtx,dty,lineeq=T,margeq=F, drawcor
   axis(1, at=xfrange,labels=round(truerange,roundtox),lwd = 0, lwd.ticks = 2,cex.axis=1.3)
   
   
-  for(i in 1:sitenichel$nCountry) {
+  for(i in 1:CommunityList$nCountry) {
     if (typeof(lineeq) != "logical" ) {
-    xhere<- stanxvals[sitenichel$CountryID ==i]
-    yhere<- stanyvals[sitenichel$CountryID ==i]
+    xhere<- stanxvals[CommunityList$CountryID ==i]
+    yhere<- stanyvals[CommunityList$CountryID ==i]
     # segment x
     mx<-max(xhere)
     mi<-min(xhere)
@@ -202,13 +201,13 @@ plotter <- function(posteriorsamp,stanx,stany,dtx,dty,lineeq=T,margeq=F, drawcor
     }
     # spatial correlation
     if (drawcor ==T) {
-      dimi<-ifelse(i==3,sitenichel$nUK,ifelse(i==2,sitenichel$nFin,sitenichel$nSpan))
+      dimi<-ifelse(i==3,CommunityList$nUK,ifelse(i==2,CommunityList$nFin,CommunityList$nSpan))
       mat<-if(i==3) {
-        sitenichel$UKMat
+        CommunityList$UKMat
       } else if(i==2) {
-        sitenichel$FinMat
+        CommunityList$FinMat
       } else {
-        sitenichel$SpainMat}
+        CommunityList$SpainMat}
       
       K <-matrix(0,nrow = dimi,ncol=dimi)
       
@@ -234,12 +233,12 @@ plotter <- function(posteriorsamp,stanx,stany,dtx,dty,lineeq=T,margeq=F, drawcor
     yrangemarg<-c()
     if(typeof(margeq) != "logical" ) {
       
-      x1here<- m1val[sitenichel$CountryID ==i]
-      x2here<- m2val[sitenichel$CountryID ==i]
-      x3here<- m3val[sitenichel$CountryID ==i]
-      x4here<- m4val[sitenichel$CountryID ==i]
+      x1here<- m1val[CommunityList$CountryID ==i]
+      x2here<- m2val[CommunityList$CountryID ==i]
+      x3here<- m3val[CommunityList$CountryID ==i]
+      x4here<- m4val[CommunityList$CountryID ==i]
       xshere<-cbind(x1here,x2here,x3here,x4here)
-      yhere<- stanyvals[sitenichel$CountryID ==i]
+      yhere<- stanyvals[CommunityList$CountryID ==i]
       ymarg<-givemarg(margeq,xshere,yhere,i)
       points(xhere,ymarg,col=col.alpha(cols[i], 0.7),pch=19,cex=1.5)
       yrangemarg<-c(yrangemarg,ymarg)
@@ -247,7 +246,7 @@ plotter <- function(posteriorsamp,stanx,stany,dtx,dty,lineeq=T,margeq=F, drawcor
       
     } else {
       
-      points(stanxvals,stanyvals,col=alpha(cols[sitenichel$CountryID],0.8/3),pch=19,cex=1.5) #they will go on top of one another - but doesn't matter
+      points(stanxvals,stanyvals,col=alpha(cols[CommunityList$CountryID],0.8/3),pch=19,cex=1.5) #they will go on top of one another - but doesn't matter
       
     }
     
@@ -407,7 +406,7 @@ colsextended<-brewer.pal(3,"Dark2")
 
 FindVarPart = function(varnames,targetname,labelnames,postsamp,ymax=1.1,box=T){
   varnamesfull = c(varnames ,"CountryID","SiteID")
-  dg =  cbind.data.frame(sitenichel[varnamesfull],sitenichel[targetname])
+  dg =  cbind.data.frame(CommunityList[varnamesfull],CommunityList[targetname])
   # make country selection
   plotlist=vector(mode="list",length=6) # first 3 plots second three tables
   
