@@ -3,6 +3,7 @@
 Luke Christopher Evans, Yolanda Melero, Reto Schmucki, Philipp H. Boersch-Supan, Lluís Brotons, Colin Fontaine, Frédéric Jiguet, Mikko Kuussaari, Dario Massimino, Robert A Robinson, David B. Roy, Oliver Schweiger, Josef Settele, Constanti Stefanescu, Chris A.M. van Turnhout, Tom Henry Oliver
 
 Code by Luke Christopher Evans
+[![DOI](https://zenodo.org/badge/495495841.svg)](https://zenodo.org/badge/latestdoi/495495841)
 
 Note: the manuscript and the accompanying code is currently under peer review.
 
