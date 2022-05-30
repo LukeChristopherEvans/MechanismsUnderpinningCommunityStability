@@ -7,7 +7,7 @@ stanpath = "MechanismsUnderpinningCommunityStability/Stan code DSeparation/"
 source(paste0(folderpath,functionpath)) # will load required packages
 CommunityList = read_rds(paste0(folderpath,datapath))
 
-d7= stan(
+d7= rstan::stan(
   file = paste0(folderpath,stanpath,"m7dsep.stan"),
   data=CommunityList,
   iter=2000,

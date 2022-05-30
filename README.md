@@ -23,5 +23,4 @@ The code relies on the use of R stan and the rethinking package. Installation of
 https://mc-stan.org/users/interfaces/rstan
 https://github.com/rmcelreath/rethinking
 
-note: the code was written in stan 2.21.0 and more recent versions of stan may show warnings due
-to new variable declarations 
+

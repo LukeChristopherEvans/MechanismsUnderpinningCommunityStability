@@ -9,7 +9,7 @@ CommunityList = read_rds(paste0(folderpath,datapath))
 
 
 set.seed(1234)
-d5_1=stan(
+d5_1=rstan::stan(
    file = paste0(folderpath,stanpath,"m5_1dsep.stan"),
   data=CommunityList,
   iter=2000,

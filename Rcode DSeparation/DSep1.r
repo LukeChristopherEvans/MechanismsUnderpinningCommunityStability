@@ -11,7 +11,7 @@ CommunityList = read_rds(paste0(folderpath,datapath))
 FishersC = vector(mode='list',length=19)
 
 set.seed(1234)
-d1= stan(
+d1= rstan::stan(
   file = paste0(folderpath,stanpath,"m1dsep.stan"),
   data=CommunityList,
   iter=2000,

@@ -15,7 +15,7 @@ CommunityData = read.csv(paste0(folderpath,datapath))
 # model structure syn ~ int + jaccard + spprich + spatial intercept
 # run the two models 
 set.seed(1234)
-synNSP<-stan(
+synNSP=rstan::stan(
   file = paste0(folderpath,stanpath,"synindexNonspatial.stan"),
   data=CommunityList,
   iter=2000,
@@ -24,7 +24,7 @@ synNSP<-stan(
   control = list(adapt_delta = 0.99)
 )
 set.seed(1234)
-synSP<-stan(
+synSP=rstan::stan(
   file = paste0(folderpath,stanpath,"synindexSpatial.stan"),
   data=CommunityList,
   iter=2000,
@@ -34,7 +34,7 @@ synSP<-stan(
 )
 set.seed(1234)
 # below compares with and without jaccard included
-synSP2<-stan(
+synSP2=rstan::stan(
   file = paste0(folderpath,stanpath,"synindexSpatial2.stan"),
   data=CommunityList,
   iter=2000,
@@ -53,20 +53,20 @@ coefplotter(synSP,coefnames =c("Intercept","Jaccard similarity","Species richnes
 spatialvarplot(synsamp)
 
 
-lineequationmab1 <- function(x,i)  synsamp$beta_p[,1,i] + synsamp$beta_p[,2,i] * x
+lineequationmab1 = function(x,i)  synsamp$beta_p[,1,i] + synsamp$beta_p[,2,i] * x
 plotter(synsamp,'Jaccard','SynIndex','jaccard','synindex',lineeq = lineequationmab1,xlab="Jaccard similarity",ylab = "Synchrony",linetype = "dds",roundtoy = 2,roundtox = 2)
-margeq1 <- function(x,y,i) y - (mean(synsamp$beta_p[,1,i]) + mean(synsamp$beta_p[,3,i]) * x[,1])
+margeq1 = function(x,y,i) y - (mean(synsamp$beta_p[,1,i]) + mean(synsamp$beta_p[,3,i]) * x[,1])
 plotter(synsamp,'Jaccard','SynIndex','jaccard','synindex',lineeq = lineequationmab1,margeq =margeq1 ,xlab="Jaccard similarity",ylab = "Synchrony",m1="SppRich",linetype = "dds",yu=4,yl=-3)
 
 
-lineequationmab2 <- function(x,i)  synsamp$beta_p[,1,i] + synsamp$beta_p[,3,i] * x
+lineequationmab2 = function(x,i)  synsamp$beta_p[,1,i] + synsamp$beta_p[,3,i] * x
 plotter(synsamp,'SppRich','SynIndex','spprich','synindex',lineeq = lineequationmab2,xlab="Species richness",ylab = "Synchrony",roundtox=0,linetype="sss")
-margeq2 <- function(x,y,i) y - (mean(synsamp$beta_p[,1,i]) + mean(synsamp$beta_p[,2,i]) * x[,1])
+margeq2 = function(x,y,i) y - (mean(synsamp$beta_p[,1,i]) + mean(synsamp$beta_p[,2,i]) * x[,1])
 plotter(synsamp,'SppRich','SynIndex','spprich','synindex',lineeq = lineequationmab2,margeq =margeq2 ,xlab="Species richness",ylab = "Synchrony",m1="Jaccard",roundtox=0,yu=4,yl=-2)
 
 # check other model for differnences - not really any
-synsamp2 <- extract.samples(synSP2)
-lineequationmab3 <- function(x,i)  synsamp2$beta_p[,1,i] + synsamp2$beta_p[,2,i] * x
+synsamp2 = extract.samples(synSP2)
+lineequationmab3 = function(x,i)  synsamp2$beta_p[,1,i] + synsamp2$beta_p[,2,i] * x
 plotter(synsamp2,'SppRich','SynIndex','spprich','synindex',lineeq = lineequationmab3,xlab="Species richness",ylab = "Synchrony",roundtox=0)
 
 

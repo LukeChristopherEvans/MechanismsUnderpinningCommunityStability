@@ -12,7 +12,7 @@ CommunityList = read_rds(paste0(folderpath,listpath))
 CommunityData = read.csv(paste0(folderpath,datapath))
 
 set.seed(1234)
-spprichNSP<-stan(
+spprichNSP=rstan::stan(
   file = paste0(folderpath,stanpath,"spprichstanNonspatial.stan"),
   data=CommunityList,
   iter=2000,
@@ -21,7 +21,7 @@ spprichNSP<-stan(
   control = list(adapt_delta = 0.99)
 )
 set.seed(1234)
-spprichSP<-stan(
+spprichSP=rstan::stan(
   file = paste0(folderpath,stanpath,"spprichstanSpatial.stan"),
   data=CommunityList,
   iter=2000,
@@ -40,7 +40,7 @@ coefplotter(spprichSP,coefnames =c("Intercept","Overall Niche distance"),type="f
 coefplotter(spprichSP,coefnames =c("Intercept","Overall Niche distance"),type="random")
 
 # tests 
-lineequation <- function(x,i)  posteriorsamp$beta_p[,1,i] + posteriorsamp$beta_p[,2,i] * x
+lineequation = function(x,i)  posteriorsamp$beta_p[,1,i] + posteriorsamp$beta_p[,2,i] * x
 plotter(posteriorsamp,'OverallNiDist','SppRich','overallnichedist','spprich',lineeq = lineequation,drawcor = F,roundtoy=0,roundtox = 0,xlab="Niche distance",ylab = "Species richness",linetype = "sdd")
 
 # figures for keeping

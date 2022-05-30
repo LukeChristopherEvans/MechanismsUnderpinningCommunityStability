@@ -8,7 +8,7 @@ source(paste0(folderpath,functionpath)) # will load required packages
 CommunityList = read_rds(paste0(folderpath,datapath))
 
 
-d2=stan(
+d2=rstan::stan(
   file = paste0(folderpath,stanpath,"m2dsep.stan"),
   data=CommunityList,
   iter=2000,

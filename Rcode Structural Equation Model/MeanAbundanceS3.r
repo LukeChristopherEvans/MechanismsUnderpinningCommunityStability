@@ -13,7 +13,7 @@ CommunityData = read.csv(paste0(folderpath,datapath))
 
 
 set.seed(1234)
-meanabNSP<-stan(
+meanabNSP=rstan::stan(
   file = paste0(folderpath,stanpath,"logmeanabNonspatial.stan"),
   data=CommunityList,
   iter=2000,
@@ -24,7 +24,7 @@ meanabNSP<-stan(
 
 
 set.seed(1234)
-meanabSP<-stan(
+meanabSP=rstan::stan(
   file = paste0(folderpath,stanpath,"logmeanabSpatial.stan"),
   data=CommunityList,
   iter=2000,
@@ -47,19 +47,19 @@ coefplotter(meanabSP,coefnames =c("Intercept","Niche Mismatch","Mean niche volum
 siteniches2$logmeanab = log(siteniches2$meanab)
 
 # interesting line is niche volume
-lineequationmab1 <-function(x,i)  logmeanpoststamp$beta_p[,1,i] + logmeanpoststamp$beta_p[,3,i] * x
+lineequationmab1 =function(x,i)  logmeanpoststamp$beta_p[,1,i] + logmeanpoststamp$beta_p[,3,i] * x
 plotter(logmeanpoststamp,'MeanVol','LgMeanAb','meanvol','logmeanab',lineeq = lineequationmab1,xlab="Mean niche volume",ylab = "Log mean abundance",roundtox = 0,linetype = "dds")
 
 # marginal versions
-marginalmab1 <- function(x,y,i) y - ( mean(logmeanpoststamp$beta_p[,1,i]) + mean(logmeanpoststamp$beta_p[,2,i]) * x[,1] )
+marginalmab1 = function(x,y,i) y - ( mean(logmeanpoststamp$beta_p[,1,i]) + mean(logmeanpoststamp$beta_p[,2,i]) * x[,1] )
 plotter(logmeanpoststamp,'MeanVol','LgMeanAb','meanvol','logmeanab',lineeq = lineequationmab1,xlab="Mean niche volume",margeq = marginalmab1,ylab = "Log mean abundance",m1="Mismatch",linetype = "dds",yu=3.1,yl=-3.1)
 
 # interesting line is niche volume
-lineequationmab2 <-function(x,i)  logmeanpoststamp$beta_p[,1,i] + logmeanpoststamp$beta_p[,2,i] * x
+lineequationmab2 =function(x,i)  logmeanpoststamp$beta_p[,1,i] + logmeanpoststamp$beta_p[,2,i] * x
 plotter(logmeanpoststamp,'Mismatch','LgMeanAb','meanvol','mismatch',lineeq = lineequationmab2,xlab="Niche mismatch",ylab = "Log mean abundance",roundtox = 0,linetype = "ddd")
 
 # marginal versions
-marginalmab2 <- function(x,y,i) y - ( mean(logmeanpoststamp$beta_p[,1,i]) + mean(logmeanpoststamp$beta_p[,3,i]) * x[,1] )
+marginalmab2 = function(x,y,i) y - ( mean(logmeanpoststamp$beta_p[,1,i]) + mean(logmeanpoststamp$beta_p[,3,i]) * x[,1] )
 plotter(logmeanpoststamp,'Mismatch','LgMeanAb','meanvol','mismatch',lineeq = lineequationmab2,xlab="Niche mismatch",margeq = marginalmab2,ylab = "Log mean abundance",m1='MeanVol',linetype = "ddd",yu=3.1,yl=-3.1)
 
 

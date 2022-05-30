@@ -13,7 +13,7 @@ smalllist = list(
 )
 
 set.seed(1234)
-d1=stan(
+d1=rstan::stan(
     file = paste0(folderpath,stanpath,"correlationtests.stan"),
   data=smalllist,
   iter=2000,

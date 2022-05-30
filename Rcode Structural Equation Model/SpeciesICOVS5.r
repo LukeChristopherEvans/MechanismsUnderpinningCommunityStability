@@ -15,7 +15,7 @@ CommunityData = read.csv(paste0(folderpath,datapath))
 # model structure sICOV ~ int + mismatch + meanvol + logmeanab + spatial intercept
 # run the two models 
 set.seed(1234)
-sicovSP<-stan(
+sicovSP=rstan::stan(
   file = paste0(folderpath,stanpath,"SpeciesIcovSpatial.stan"),
   data=CommunityList,
   iter=2000,
@@ -24,7 +24,7 @@ sicovSP<-stan(
   control = list(adapt_delta = 0.99)
 )
 set.seed(1234)
-sicovNSP<-stan(
+sicovNSP=rstan::(
   file = paste0(folderpath,stanpath,"SpeciesIcovNonspatial.stan"),
   data=CommunityList,
   iter=2000,
@@ -46,12 +46,12 @@ spatialvarplot(sisamp)
 
 
 
-lineequationmab1 <- function(x,i)  sisamp$beta_p[,1,i] + sisamp$beta_p[,2,i] * x
+lineequationmab1 = function(x,i)  sisamp$beta_p[,1,i] + sisamp$beta_p[,2,i] * x
 plotter(sisamp,'Mismatch','SpeICOV','mismatch','speciesICOV',lineeq = lineequationmab1,xlab="Niche mismatch",ylab = "Average species stability")
 margeq1 <- function(x,y,i) y - (mean(sisamp$beta_p[,1,i]) + mean(sisamp$beta_p[,3,i]) * x[,1] + mean(sisamp$beta_p[,4,i]) * x[,2])
 plotter(sisamp,'Mismatch','SpeICOV','mismatch','speciesICOV',lineeq = lineequationmab1,margeq =margeq1,xlab="Niche mismatch",ylab = "Average species stability",m1="MeanVol",m2="LgMeanAb",yu=5,yl=-2)
 
-lineequationmab2 <- function(x,i)  sisamp$beta_p[,1,i] + sisamp$beta_p[,4,i] * x
+lineequationmab2 = function(x,i)  sisamp$beta_p[,1,i] + sisamp$beta_p[,4,i] * x
 plotter(sisamp,'LgMeanAb','SpeICOV','logmeanab','speciesICOV',lineeq = lineequationmab2,xlab="Log mean abundance",ylab = "Average species stability")
 margeq2 <- function(x,y,i) y - (mean(sisamp$beta_p[,1,i]) + mean(sisamp$beta_p[,2,i]) * x[,1] + mean(sisamp$beta_p[,3,i]) * x[,2])
 plotter(sisamp,'LgMeanAb','SpeICOV','logmeanab','speciesICOV',lineeq = lineequationmab2,margeq =margeq2,xlab="Log mean abundance",ylab = "Average species stability",m1="Mismatch",m2="MeanVol",yu=6,yl=-2)
